@@ -523,6 +523,7 @@ A writer outputs issued log entries (for example to a log file or to the console
  [Logcat Writer](#logcat-writer)             | logcat       | Forwards log entries to Android's native logging system
  [Rolling File Writer](#rolling-file-writer) | rolling file | Like _File Writer_ but uses multiple files by rotating them
  [Shared File Writer](#shared-file-writer)   | shared file  | Like _File Writer_ but supports writing of multiple instances of an application to the same file
+ [Syslog Writer](#syslog-writer)             | syslog       | Sends log entries to syslog server.
 
 Example:
 
@@ -734,6 +735,27 @@ writer.format  = {level}: {message} # optional
 writer.file    = log.txt            # required, absolute or relative path
 writer.charset = UTF-8              # optional
 writer.append  = true               # optional, default: false
+```
+
+### Syslog Writer
+
+The syslog writer sends log entries to a syslog server using UDP or TCP protocol. It allows specyfing a hostname and a port of a syslog server, by default uses localhost with port 514.
+
+It allows classifying the log entry sent to syslog server by facilty and severity. Facility can take values from a list: KERN, USER, MAIL, DAEMON, AUTH, SYSLOG, LPR, NEWS, UUCP, CRON, AUTHPRIV, FTP, NTP, LOG_AUDIT, LOG_ALERT, CLOCK, LOCAL0 to LOCAL7. Default facilty used is USER.
+
+The syslog severity can take values from a list: EMERG, ALERT, CRITICAL, ERROR, WARNING, NOTICE, INFO, DEBUG. If no syslog severity is specified it will try to use a writer level property and translate to appropriate syslog severity and if no level is defined it will use default INFO severity.
+
+Example:
+
+```properties
+writer                 = syslog
+writer.host            = localhost          # optional
+writer.port            = 514                # optional
+writer.protocol        = udp                # optional, udp or tcp
+writer.format          = {message}          # optional
+writer.facility        = USER               # optional
+writer.severity        = INFO               # optional
+writer.identification  = SyslogWriter       # optional
 ```
 
 ## Writing Thread
